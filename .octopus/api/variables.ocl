@@ -1,11 +1,3 @@
-variable "Octopus.Azure.Account" {
-    type = "AzureAccount"
-
-    value "octopetshop-azure-subscription" {
-        description = ""
-    }
-}
-
 variable "Project.CleanedEnvironmentName" {
     value "#{Octopus.Environment.Name | Replace \"[^a-zA-Z]+\" \"-\" | ToLower}" {}
 }
@@ -18,33 +10,33 @@ variable "Project.Database.Name" {
     value "#{Project.CleanedSpaceName | Replace \"-\" \"_\"}_#{Project.CleanedEnvironmentName | Replace \"-\" \"_\"}_octopub" {}
 }
 
-variable "spec:template:spec:containers:0:env:0:value" {
-    value "#{Azure.MySql.Server.Name}" {}
-}
-
-variable "spec:template:spec:containers:0:env:1:value" {
-    value "#{Azure.MySql.Admin.User}" {}
-}
-
 variable "spec:template:spec:containers:0:env:3:value" {
     value "#{Project.Database.Name}" {}
 }
 
 variable "spec:template:spec:containers:0:image" {
-    value "registry.gitlab.com/octopus_samples/octopublite/octopublite-api:#{Octopus.Release.Number}" {}
+    value "adamoctoclose/octoretail-api:#{Octopus.Action.Package[octoretail-api].PackageVersion}" {}
+}
+
+variable "spec:template:spec:containers:0:env:0:value" {
+    value "#{MySQL.Database.Host}" {}
+}
+
+variable "spec:template:spec:containers:0:env:1:value" {
+    value "#{MySQl.Database.User}" {}
 }
 
 variable "spec:template:spec:containers:0:env:2:value" {
-    value "#{Azure.MySql.Admin.Password}" {
+    value "#{MySQL.Database.Password}" {
         environment = ["development"]
     }
 
-    value "#{Azure.MySql.Admin.Password}" {
+    value "#{MySQL.Database.Password}" {
         description = ""
         environment = ["test"]
     }
 
-    value "#{Azure.MySql.Admin.Password}" {
+    value "#{MySQL.Database.Password}" {
         description = ""
         environment = ["production"]
     }

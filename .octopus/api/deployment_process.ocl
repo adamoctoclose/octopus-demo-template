@@ -1,5 +1,5 @@
-step "deploy-kubernetes-yaml" {
-    name = "Deploy API Service"
+step "deploy-api-yaml" {
+    name = "Deploy API YAML"
     properties = {
         Octopus.Action.TargetRoles = "demo-k8s-cluster"
     }
@@ -11,32 +11,25 @@ step "deploy-kubernetes-yaml" {
             Octopus.Action.GitRepository.Source = "Project"
             Octopus.Action.Kubernetes.DeploymentTimeout = "180"
             Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
+            Octopus.Action.Kubernetes.ServerSideApply.Enabled = "False"
+            Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "False"
             Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "manifests/api.yaml"
-            Octopus.Action.KubernetesContainers.Namespace = "#{Octopublite.namespace}"
+            Octopus.Action.KubernetesContainers.Namespace = "#{Octoretail.namespace}"
             Octopus.Action.Package.JsonConfigurationVariablesTargets = "**/*.{yml,yaml}"
-            Octopus.Action.Script.ScriptSource = "GitRepository"
-            OctopusUseBundledTooling = "False"
-        }
-        worker_pool = "hosted-ubuntu"
-
-        container {
-            feed = "docker-hub"
-            image = "octopusdeploy/worker-tools:6.1.1-ubuntu.22.04"
-        }
-    }
-}
-
-step "send-completion-notification" {
-    name = "Send Completion Notification"
-
-    action {
-        action_type = "Octopus.Email"
-        environments = ["production"]
-        properties = {
-            Octopus.Action.Email.Body = "#{Octopus.Release.Notes}"
-            Octopus.Action.Email.Subject = "Release #{Octopus.Release.Number} has been deployed to #{Octopus.Environment.Name}"
-            Octopus.Action.Email.To = "#{Octopus.Deployment.CreatedBy.EmailAddress}"
             Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
+        }
+        worker_pool_variable = ""
+
+        packages "octoretail-api" {
+            acquisition_location = "NotAcquired"
+            feed = "docker-hub"
+            package_id = "adamoctoclose/octoretail-api"
+            properties = {
+                Extract = "False"
+                Purpose = "DockerImageReference"
+                SelectionMode = "immediate"
+            }
         }
     }
 }
