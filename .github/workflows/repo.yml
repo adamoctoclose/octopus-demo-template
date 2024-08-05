@@ -33,17 +33,4 @@ jobs:
       uses: OctopusDeploy/push-package-action@v3.0.4
       with: 
         packages: octopus.demo.templae.zip
-        
-
-
-
-
-
-
-    - name: Upload ZIP file as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: repository-zip
-        path: repo.zipzip:
-
        
