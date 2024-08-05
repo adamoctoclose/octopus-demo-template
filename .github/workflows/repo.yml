@@ -39,4 +39,10 @@ jobs:
       with: 
         space: Platform Team
         packages: octopus.demo.template.${{ steps.create-version-number.outputs.version }}.zip
+
+    - name: Push Build Information to Octopus
+      uses: OctopusDeploy/push-build-information-action@v3
+      with:
+        packages: octopus.demo.template
+        version: ${{ steps.create-version-number.outputs.version }}
        
