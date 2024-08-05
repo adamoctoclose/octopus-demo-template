@@ -30,5 +30,6 @@ jobs:
     - name: Push to Octopus
       uses: OctopusDeploy/push-package-action@v3.0.4
       with: 
+        space: Platform Team
         packages: octopus.demo.templae.zip
        
