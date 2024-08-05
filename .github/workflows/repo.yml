@@ -21,6 +21,12 @@ jobs:
        server: "https://adamclose.octopus.app/"
        service_account_id: "7bca9f0c-70a6-4e95-a9ff-6aae2d170d43"
 
+    - name: Create Octopus release
+      uses: OctopusDeploy/create-release-action@v3
+      with:
+        space: Platform Team
+        project: Testing
+
     - name: Checkout repository
       uses: actions/checkout@v3
 
