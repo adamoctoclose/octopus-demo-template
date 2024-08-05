@@ -36,5 +36,5 @@ jobs:
       uses: OctopusDeploy/push-package-action@v3
       with: 
         space: Platform Team
-        packages: octopus.demo.template${{ steps.create-version-number.outputs.version }}.zip
+        packages: octopus.demo.template.${{ steps.create-version-number.outputs.version }}.zip
        
