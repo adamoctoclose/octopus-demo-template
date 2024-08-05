@@ -2,8 +2,8 @@ name: Database
 
 on:
   push:
-    branches: ['main']
-    paths: ['mysql/**']
+    #branches: ['main']
+    #paths: ['mysql/**']
 
 env:
   OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
