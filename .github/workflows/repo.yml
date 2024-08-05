@@ -21,6 +21,12 @@ jobs:
        server: "https://adamclose.octopus.app/"
        service_account_id: "7bca9f0c-70a6-4e95-a9ff-6aae2d170d43"
 
+    - name: Push to Octopus
+      uses: OctopusDeploy/push-package-action@v3.0.4
+      with: 
+        space: Platform Team
+        packages: octopus.demo.templae.zip
+       
     - name: Create Octopus release
       uses: OctopusDeploy/create-release-action@v3
       with:
@@ -32,10 +38,4 @@ jobs:
 
     - name: Create ZIP file
       run: zip -r octopus.demo.templae.zip .
-
-    - name: Push to Octopus
-      uses: OctopusDeploy/push-package-action@v3.0.4
-      with: 
-        space: Platform Team
-        packages: octopus.demo.templae.zip
        
