@@ -3,17 +3,15 @@ name: Zip Repository
 on:
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
 
 jobs:
 
- Octopus: 
+ push_to_octopus: 
    runs-on: ubuntu-latest
-
+   name: Push Package to Octopus Deploy
+   permissions: 
+     id-token: write  
    steps:
-
     - name: create-version-number
       run: echo "version=$(date +'%Y.%m.%d')" >> "$GITHUB_OUTPUT"
 
