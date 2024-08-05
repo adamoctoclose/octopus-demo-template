@@ -3,7 +3,6 @@ name: Zip Repository
 on:
   workflow_dispatch:
 
-
 jobs:
 
  push_to_octopus: 
@@ -31,11 +30,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Create ZIP file
-      run: zip -r octopus.demo.templae.zip .
+      run: zip -r octopus.demo.template.${{ steps.create-version-number.outputs.version }}.zip .
 
     - name: Push to Octopus
       uses: OctopusDeploy/push-package-action@v3
       with: 
         space: Platform Team
-        packages: octopus.demo.templae.zip
+        packages: octopus.demo.template${{ steps.create-version-number.outputs.version }}.zip
        
