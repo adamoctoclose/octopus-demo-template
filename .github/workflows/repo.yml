@@ -4,18 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  zip:
-    runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+ Login: 
+   runs-on: ubuntu-latest
 
-    - name: Create ZIP file
-      run: zip -r repo.zip .
+   steps:
 
-    - name: Upload ZIP file as artifact
-      uses: actions/upload-artifact@v3
+    - name: Login to Octopus Deploy
+      uses: OctopusDeploy/login@v1.0.1
       with:
-        name: repository-zip
-        path: repo.zip
+       server: "https://adamclose.octopus.app/"
+       service_account_id: "81"
