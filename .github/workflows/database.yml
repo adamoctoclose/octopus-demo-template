@@ -1,7 +1,7 @@
 name: Database
 
 on:
-  push:
+  #push:
     #branches: ['main']
     #paths: ['mysql/**']
 
