@@ -44,6 +44,6 @@ jobs:
       uses: OctopusDeploy/push-build-information-action@v3
       with:
         space: Platform Team
-        packages: octopus.demo.template
+        packages: octopus.demo.template.${{ steps.create-version-number.outputs.version }}.zip
         version: ${{ steps.create-version-number.outputs.version }}
        
