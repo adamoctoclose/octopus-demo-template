@@ -12,7 +12,9 @@ jobs:
      id-token: write  
    steps:
     - name: create-version-number
+      id: create-version-number
       run: echo "version=$(date +'%Y.%m.%d')" >> "$GITHUB_OUTPUT"
+
 
     - name: Login to Octopus Deploy
       uses: OctopusDeploy/login@v1.0.1
