@@ -1,6 +1,3 @@
-$ErrorActionPreference = "Stop";
-
-
 param(
     [Parameter(Mandatory = $True)]
     [string]$OctopusURL,
@@ -17,6 +14,9 @@ param(
     [Parameter(Mandatory = $False)]
     [string[]]$Environments
 )
+
+$ErrorActionPreference = "Stop";
+
 
 $body = @{
     Name                     = $spaceName
