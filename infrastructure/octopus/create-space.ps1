@@ -29,6 +29,7 @@ $body = @{
 
 $response = try {
     Write-Host "Creating space '$spaceName'"
+    Write-Host "URL: '$octopusURL'"
     (Invoke-WebRequest $octopusURL/api/spaces -Headers $header -Method Post -Body $body -ErrorVariable octoError)
 }
 catch [System.Net.WebException] {
