@@ -17,6 +17,8 @@ param(
 
 $ErrorActionPreference = "Stop";
 
+$header = @{ "X-Octopus-ApiKey" = $octopusAPIKey }
+
 
 $body = @{
     Name                     = $spaceName
