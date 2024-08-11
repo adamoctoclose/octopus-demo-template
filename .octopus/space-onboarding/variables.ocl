@@ -1,15 +1,15 @@
-variable "Project.Space.Environments" {
-    value "@('Development', 'Test', 'Production')" {}
+variable "Project.Git.Url" {
+    value "https://github.com/adamoctoclose/octopus-demo-template.git" {}
 }
 
-variable "Project.Space.TeamMembers" {
-    value {}
+variable "Project.Space.Environments" {
+    value "\"'Development', 'Test', 'Production'\"" {}
 }
 
 variable "Project.Space.Managers" {
-    value {}
+    value "\"Users-21\"" {}
 }
 
-variable "Project.Git.Url" {
-    value "https://github.com/adamoctoclose/octopus-demo-template.git" {}
+variable "Project.Space.TeamMembers" {
+    value "\"Users-21\"" {}
 }
