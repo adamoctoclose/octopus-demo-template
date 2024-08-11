@@ -17,6 +17,11 @@ variable "octopusapikey" {
   default = "#{Octopus.API.Key}"
 }
 
+variable "octopusspacename" {
+  type    = string
+  default = "#{Octopus.Space.Name}"
+}
+
 
 resource "azurerm_resource_group" "default" {
   name     = "demo.octopus.kubernetes"
@@ -62,59 +67,54 @@ provider "helm" {
 }
 
 resource "helm_release" "csi_driver_nfs" {
-  name       = "csi-driver-nfs"
-  namespace  = "kube-system"
-  repository = "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
-  chart      = "csi-driver-nfs"
-  version    = "v4.6.0"
-  atomic     = true
+  name             = "csi-driver-nfs"
+  namespace        = "kube-system"
+  repository       = "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
+  chart            = "csi-driver-nfs"
+  version          = "v4.6.0"
+  atomic           = true
   create_namespace = true
 }
 
 resource "helm_release" "octopus_agent_democluster" {
-  name = "democluster"
-  namespace = "octopus-agent-democluster"
-  repository = "oci://registry-1.docker.io"
-  chart = "octopusdeploy/kubernetes-agent"
+  name             = "democluster"
+  namespace        = "octopus-agent-democluster"
+  repository       = "oci://registry-1.docker.io"
+  chart            = "octopusdeploy/kubernetes-agent"
   create_namespace = true
-  atomic = true
-  
+  atomic           = true
+
   set {
-    name = "agent.acceptEula"
+    name  = "agent.acceptEula"
     value = "Y"
   }
   set {
-    name = "agent.targetName"
-    value = "Demo Cluster"
+    name  = "agent.targetName"
+    value = "Platform Cluster"
   }
   set {
-    name = "agent.serverUrl"
-    value = "https://demo.octopus.app/"
+    name  = "agent.serverUrl"
+    value = "https://adamclose.octopus.app/"
   }
   set {
-    name = "agent.serverCommsAddress"
-    value = "https://polling.demo.octopus.app/"
+    name  = "agent.serverCommsAddress"
+    value = "https://polling.adamclose.octopus.app/"
   }
   set {
-    name = "agent.space"
-    value = "Retail Tech"
+    name  = "agent.space"
+    value = "Platform Team"
   }
   set {
-    name = "agent.targetEnvironments"
+    name  = "agent.targetEnvironments"
     value = "{development,test,production}"
   }
   set {
-    name = "agent.targetRoles"
+    name  = "agent.targetRoles"
     value = "{demo-k8s-cluster}"
   }
   set {
-    name = "agent.bearerToken"
-    value = "e"
-  }
-
-  set {
-    name = "agent.serverApiKey"
+    name  = "agent.serverApiKey"
     value = var.octopusapikey
   }
-depends_on = [helm_release.csi_driver_nfs]
+  depends_on = [helm_release.csi_driver_nfs]
 }
