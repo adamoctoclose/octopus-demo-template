@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop";
 
 
-Param(
+param(
     [Parameter(Mandatory = $True)]
     [string]$OctopusURL,
     [Parameter(Mandatory = $True)]
