@@ -1,15 +1,22 @@
 $ErrorActionPreference = "Stop";
 
-# Define working variables
-$octopusURL = "https://your-octopus-url"
-$octopusAPIKey = "API-YOUR-KEY"
-$header = @{ "X-Octopus-ApiKey" = $octopusAPIKey }
 
-$spaceName = "New Space"
-$description = "Space for the new, top secret project."
-$managersTeams = @() # an array of team Ids to add to Space Managers
-$managerTeamMembers = @() # an array of user Ids to add to Space Managers
-$environments = @('Development', 'Test', 'Production')
+Param(
+    [Parameter(Mandatory = $True)]
+    [string]$OctopusURL,
+    [Parameter(Mandatory = $True)]
+    [string]$OctopusAPIKey,
+    [Parameter(Mandatory = $True)]
+    [string]$SpaceName,
+    [Parameter(Mandatory = $False)]
+    [string]$Description,
+    [Parameter(Mandatory = $False)]
+    [string[]]$ManagersTeams,
+    [Parameter(Mandatory = $False)]
+    [string[]]$ManagerTeamMembers,
+    [Parameter(Mandatory = $False)]
+    [string[]]$Environments
+)
 
 $body = @{
     Name                     = $spaceName
