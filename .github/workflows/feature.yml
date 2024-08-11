@@ -1,12 +1,6 @@
 name: Feature Branch
 
-on:
-  #push:
-    #branches:    
-      #- '*'         # matches every branch that doesn't contain a '/'
-      #- '*/*'       # matches every branch containing a single '/'
-      #- '**'        # matches every branch
-      #- '!main'   # excludes master
+
 
 env:
   OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}

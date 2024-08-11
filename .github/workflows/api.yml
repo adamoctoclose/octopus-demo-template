@@ -1,9 +1,5 @@
 name: API
 
-on:
-  #push:
-    #branches: ['main']
-    #paths: ['api/**']
 
 env:
   OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
