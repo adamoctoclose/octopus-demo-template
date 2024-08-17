@@ -6,34 +6,34 @@ provider "azurerm" {
 variable "admin_username" {
   description = "The admin username for the Windows VM"
   type        = string
-  default     = "project.azure.vm.username"
+  default     = "#{project.azure.vm.username]"
 }
 
 variable "admin_password" {
   description = "The admin password for the Windows VM"
   type        = string
   sensitive   = true
-  default     = "project.azure.vm.password"
+  default     = "#{project.azure.vm.password}"
 }
 
 variable "vm_size" {
   description = "The size for the Windows VM"
   type        = string
   sensitive   = true
-  default     = "project.azure.vm.size"
+  default     = "#{project.azure.vm.size}"
 }
 
 variable "octopus_server_url" {
   description = "The URL of the Octopus Deploy server"
   type        = string
-  default     = "project.azure.vm.octopus.url"
+  default     = "#{project.azure.vm.octopus.url}"
 }
 
 variable "octopus_api_key" {
   description = "The URL of the Octopus Deploy server"
   type        = string
   sensitive   = true
-  default     = "project.azure.vm.octopus.apikey"
+  default     = "#{project.azure.vm.octopus.apikey}"
 }
 
 # Create a resource group
