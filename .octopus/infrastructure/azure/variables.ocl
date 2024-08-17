@@ -3,3 +3,7 @@ variable "Project.Azure.User" {
 
     value "visual-studio-professional" {}
 }
+
+variable "admin_username" {
+    value "octoadmin" {}
+}
