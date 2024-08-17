@@ -105,20 +105,16 @@ resource "azurerm_windows_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  custom_data = base64encode(file("install-tentacle.ps1"))
-}
-
-# PowerShell script to install Octopus Deploy Tentacle
-resource "local_file" "install_tentacle_script" {
-  content  = <<-EOF
-    # Install Octopus Deploy Tentacle
+    custom_data = base64encode(<<-EOF
+    # PowerShell script to download and install Octopus Deploy Tentacle
     Invoke-WebRequest -Uri "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.6.0.0-x64.msi" -OutFile "C:\\Octopus.Tentacle.msi"
     Start-Process "msiexec.exe" -ArgumentList "/i C:\\Octopus.Tentacle.msi /quiet" -Wait
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" create-instance --instance "Tentacle" --config "C:\\Octopus\\Tentacle\\Tentacle.config" --console
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" new-certificate --instance "Tentacle" --if-blank --console
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" configure --instance "Tentacle" --reset-trust --console
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" register-with --instance "Tentacle" --server "${var.octopus_server_url}" --apiKey "${var.octopus_api_key}" --role "web-server" --environment "Production" --console
+    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" register-with --instance "Tentacle" --server "https://your.octopus.server" --apiKey "your_api_key" --role "web-server" --environment "Production" --console
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" service --instance "Tentacle" --install --start --console
-  EOF
-  filename = "${path.module}/install-tentacle.ps1"
+  EOF)
+}
+
 }
