@@ -108,22 +108,6 @@ resource "azurerm_windows_virtual_machine" "vm" {
   custom_data = base64encode(file("install-tentacle.ps1"))
 }
 
-# Custom script extension to install Octopus Deploy Tentacle
-resource "azurerm_virtual_machine_extension" "custom_script" {
-  name                 = "install-tentacle"
-  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.10"
-
-  settings = <<SETTINGS
-    {
-        "fileUris": ["https://raw.githubusercontent.com/OctopusDeploy/OctopusTentacle/master/InstallTentacle.ps1"],
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File install-tentacle.ps1"
-    }
-SETTINGS
-}
-
 # PowerShell script to install Octopus Deploy Tentacle
 resource "local_file" "install_tentacle_script" {
   content  = <<-EOF
@@ -136,5 +120,5 @@ resource "local_file" "install_tentacle_script" {
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" register-with --instance "Tentacle" --server "${var.octopus_server_url}" --apiKey "${var.octopus_api_key}" --role "web-server" --environment "Production" --console
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" service --instance "Tentacle" --install --start --console
   EOF
-  filename = "install-tentacle.ps1"
+  filename = "${path.module}/install-tentacle.ps1"
 }
