@@ -105,8 +105,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
     sku       = "2019-Datacenter"
     version   = "latest"
   }
-
-  custom_data = base64decode(<<EOF
+  custom_data = base64encode(<<EOF
 <powershell>  
   $ErrorActionPreference = "Stop" 
   # Download Octopus Tentacle MSI
