@@ -4,6 +4,18 @@ variable "Project.Azure.User" {
     value "visual-studio-professional" {}
 }
 
-variable "admin_username" {
+variable "project.azure.vm.octopus.url" {
+    value "#{octopus.url}" {}
+}
+
+variable "project.azure.vm.size" {
+    value "Standard_B2s" {}
+}
+
+variable "project.azure.vm.password" {
+    value "#{octopus.api.key}" {}
+}
+
+variable "project.azure.vm.username" {
     value "octoadmin" {}
 }
