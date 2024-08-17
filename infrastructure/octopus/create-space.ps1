@@ -63,3 +63,27 @@ foreach ($environment in $environments) {
         exit
     }
 }
+
+
+$body = @{
+    Name                     = $spaceName
+    Description              = $description
+    SpaceManagersTeams       = $managersTeams
+    SpaceManagersTeamMembers = $managerTeamMembers
+    IsDefault                = $false
+    TaskQueueStopped         = $false
+} | ConvertTo-Json
+
+$response = try {
+    Write-Host "Creating space '$spaceName'"
+    Write-Host "URL: '$octopusURL'"
+    (Invoke-WebRequest $octopusURL/api/spaces -Headers $header -Method Post -Body $body -ErrorVariable octoError)
+}
+catch [System.Net.WebException] {
+    $_.Exception.Response
+}
+
+Invoke-WebRequest -UseBasicParsing -Uri "https://adamclose.octopus.app/api/Spaces-244/git-credentials" `
+    -Method "POST" `
+    -ContentType "application/json" `
+    -Body "{`"Id`":null,`"SpaceId`":`"`",`"Name`":`"adamoctoclose`",`"Description`":`"`",`"Details`":{`"Type`":`"UsernamePassword`",`"Username`":`"adamoctoclose`",`"Password`":{`"HasValue`":true,`"NewValue`":`"wfwrgerwgregregregrgr`"}},`"Links`":null}"
