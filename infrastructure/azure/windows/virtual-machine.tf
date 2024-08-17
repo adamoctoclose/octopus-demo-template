@@ -107,27 +107,6 @@ resource "azurerm_windows_virtual_machine" "vm" {
   }
 }
 
-resource "azurerm_virtual_machine_extension" "vm_extension" {
-  name                 = "octopus-tentacle-extension"
-  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.10"
-
-  settings = <<SETTINGS
-    {
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File install-tentacle.ps1"
-    }
-SETTINGS
-
-  protected_settings = <<PROTECTED_SETTINGS
-    {
-        "script": "${base64encode(file("install-tentacle.ps1"))}"
-    }
-PROTECTED_SETTINGS
-}
-
-# Create a local file with the PowerShell script
 resource "local_file" "install_tentacle_script" {
   content  = <<-EOF
     $ErrorActionPreference = "Stop"
@@ -145,4 +124,24 @@ resource "local_file" "install_tentacle_script" {
     & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" service --instance "Tentacle" --install --start --console
   EOF
   filename = "${path.module}/install-tentacle.ps1"
+}
+
+resource "azurerm_virtual_machine_extension" "vm_extension" {
+  name                 = "octopus-tentacle-extension"
+  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File install-tentacle.ps1"
+    }
+SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+    {
+        "script": "${base64encode(file(local_file.install_tentacle_script.filename))}"
+    }
+PROTECTED_SETTINGS
 }
