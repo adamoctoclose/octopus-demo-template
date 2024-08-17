@@ -82,7 +82,7 @@ resource "azurerm_network_interface" "nic" {
 
 # Create a Windows virtual machine
 resource "azurerm_windows_virtual_machine" "vm" {
-  name                = "demo-octopus-windows-vm"
+  name                = "demo-windows"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   size                = var.vm_size
