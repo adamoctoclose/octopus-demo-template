@@ -12,10 +12,6 @@ variable "project.azure.vm.size" {
     value "Standard_B2s" {}
 }
 
-variable "project.azure.vm.password" {
-    value "#{octopus.api.key}" {}
-}
-
 variable "project.azure.vm.username" {
     value "octoadmin" {}
 }
