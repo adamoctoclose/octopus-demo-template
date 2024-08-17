@@ -13,5 +13,5 @@ variable "project.azure.vm.size" {
 }
 
 variable "project.azure.vm.username" {
-    value "octoadmin" {}
+    value "octoadam" {}
 }
