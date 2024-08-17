@@ -1,0 +1,5 @@
+variable "Project.Azure.User" {
+    type = "AzureAccount"
+
+    value "visual-studio-professional" {}
+}
