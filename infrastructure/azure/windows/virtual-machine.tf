@@ -6,7 +6,7 @@ provider "azurerm" {
 variable "admin_username" {
   description = "The admin username for the Windows VM"
   type        = string
-  default     = "#{project.azure.vm.username]"
+  default     = "#{project.azure.vm.username}"
 }
 
 variable "admin_password" {
