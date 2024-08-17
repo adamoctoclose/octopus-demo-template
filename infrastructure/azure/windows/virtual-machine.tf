@@ -2,6 +2,20 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  custom_data = base64encode(<<-EOF
+<powershell>
+  $ErrorActionPreference = "Stop"
+  Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+  choco install octopusdeploy.tentacle -y
+</powershell>
+EOF
+  )
+}
+
+
+# Encode and pass you script
+
 
 variable "admin_username" {
   description = "The admin username for the Windows VM"
@@ -35,6 +49,7 @@ variable "octopus_api_key" {
   sensitive   = true
   default     = "#{project.azure.vm.octopus.apikey}"
 }
+
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
@@ -105,43 +120,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
     sku       = "2019-Datacenter"
     version   = "latest"
   }
-}
 
-resource "local_file" "install_tentacle_script" {
-  content  = <<-EOF
-    $ErrorActionPreference = "Stop"
-    # Download Octopus Tentacle MSI
-    Invoke-WebRequest -Uri "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.6.0.0-x64.msi" -OutFile "C:\\Octopus.Tentacle.msi"
-    # Install Octopus Tentacle
-    Start-Process "msiexec.exe" -ArgumentList "/i C:\\Octopus.Tentacle.msi /quiet" -Wait
-    # Create Tentacle instance
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" create-instance --instance "Tentacle" --config "C:\\Octopus\\Tentacle.config" --console
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" new-certificate --instance "Tentacle" --if-blank --console
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" configure --instance "Tentacle" --reset-trust --console
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" configure --instance "Tentacle" --home "C:\\Octopus" --app "C:\\Octopus\\Applications" --port "10933" --console
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" configure --instance "Tentacle" --trust "A901DF5FD0E2A300DBE457AAE4A7D16ACE609B85" --console
-    netsh advfirewall firewall add rule "name=Octopus Deploy Tentacle" dir=in action=allow protocol=TCP localport=10933
-    & "C:\\Program Files\\Octopus Deploy\\Tentacle\\Tentacle.exe" service --instance "Tentacle" --install --start --console
-  EOF
-  filename = "${path.module}/install-tentacle.ps1"
-}
+  custom_data = base64encode(local.custom_data)
 
-resource "azurerm_virtual_machine_extension" "vm_extension" {
-  name                 = "octopus-tentacle-extension"
-  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.10"
-
-  settings = <<SETTINGS
-    {
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File install-tentacle.ps1"
-    }
-SETTINGS
-
-  protected_settings = <<PROTECTED_SETTINGS
-    {
-        "script": "${base64encode(file(local_file.install_tentacle_script.filename))}"
-    }
-PROTECTED_SETTINGS
 }
